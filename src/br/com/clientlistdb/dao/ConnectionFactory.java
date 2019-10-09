@@ -12,12 +12,11 @@ import java.sql.SQLException;
  */
 public class ConnectionFactory {
         // METODO UTILIZADO PARA ABRIR CONEXÃO COM O BANCO
-    public static Connection openConnection() throws Exception { // METODO UTILIZADO PARA ABRIR CONEXÃO COM O BANCO
+    public static Connection openConnection() throws Exception { 
         // FORNAME É O METODO DENTRO DA CLASSE (CLASS)
         Class.forName("com.mysql.jdbc.Driver");
         // IMPORTAR DRIVER JDBC DA BIBLIOTECA
-        return DriverManager.
-                getConnection("jdbc:mysql://localhost:3306/clientlist",
+        return DriverManager.getConnection("jdbc:mysql://localhost:3306/clientlist",
                         "root", "");
     }
 
@@ -26,7 +25,8 @@ public class ConnectionFactory {
         close(conn, ps, null);
     }
 
-    public static void closeConnection(Connection conn, PreparedStatement ps, // PREPARED UTILIZADO EM CONJUNTO COM O INSERT COM O BANCO DE DADOS
+   // PREPARED UTILIZADO EM CONJUNTO COM O INSERT COM O BANCO DE DADOS
+    public static void closeConnection(Connection conn, PreparedStatement ps, 
             ResultSet rs) { // PEGAR O QUE VEM DO SELECT DO BANCO DE DADOS
         close(conn, ps, rs);
     }
