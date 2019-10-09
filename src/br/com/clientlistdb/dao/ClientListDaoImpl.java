@@ -52,7 +52,7 @@ public class ClientListDaoImpl implements Serializable {
     }
 
     public void change(Client client) {
-        String query = "UPDATE FROM client SET name = ?, individualRegistration = ?,"
+        String query = "UPDATE client SET name = ?, individualRegistration = ?,"
                 + "email = ? WHERE idClient = ?";
         try {
             connection = ConnectionFactory.openConnection();
@@ -72,7 +72,7 @@ public class ClientListDaoImpl implements Serializable {
     }
 
     public void delete(int id) {
-        String query = "DELETE FROM Client WHERE idClient = ?";
+        String query = "DELETE * FROM Client WHERE idClient = ?";
         try {
             connection = ConnectionFactory.openConnection();
             prepared = connection.prepareStatement(query);
@@ -86,7 +86,7 @@ public class ClientListDaoImpl implements Serializable {
     }
 
     public List<Client> listAll() {
-        String query = "SELECT FROM Client INNER JOIN Phone ON Client.idclient = Phone.idclient";
+        String query = "SELECT * FROM Client INNER JOIN Phone ON Client.idclient = Phone.idclient";
         try {
             connection = ConnectionFactory.openConnection();
             prepared = connection.prepareStatement(query);
@@ -114,7 +114,7 @@ public class ClientListDaoImpl implements Serializable {
     }
 
     public Client searchById(int id) {
-        String query = "SELECT FROM client INNER JOIN Phone ON Client.idClient = "
+        String query = "SELECT * FROM client INNER JOIN Phone ON Client.idClient = "
                 + "Phone.idClient WHERE Client.idClient = ?";
         try {
             connection = ConnectionFactory.openConnection();

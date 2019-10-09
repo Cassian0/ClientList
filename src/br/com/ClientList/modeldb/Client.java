@@ -22,7 +22,8 @@ public class Client {
 
     }
 
-    public Client(String name, String individualRegistration, String email) {
+    public Client(Integer id, String name, String individualRegistration, String email) {
+        this.id = id;
         this.name = name;
         this.individualRegistration = individualRegistration;
         this.email = email;
