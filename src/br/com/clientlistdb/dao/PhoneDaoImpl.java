@@ -32,7 +32,7 @@ public class PhoneDaoImpl implements Serializable {
     }
     
     public void change(Phone phone, Connection connection){
-        String query = "UPDATE Phone SET phoneNumber = ?, type = ?, phoneCarrier = ?,"
+        String query = "UPDATE Phone SET phoneNumber = ?, type = ?, phoneCarrier = ? "
                 + "WHERE idPhone = ?";
         try {
         prepared = connection.prepareStatement(query);

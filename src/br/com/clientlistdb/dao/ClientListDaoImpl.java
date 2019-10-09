@@ -2,11 +2,13 @@ package br.com.clientlistdb.dao;
 
 import br.com.ClientList.modeldb.Client;
 import br.com.ClientList.modeldb.Phone;
+import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -52,7 +54,7 @@ public class ClientListDaoImpl implements Serializable {
     }
 
     public void change(Client client) {
-        String query = "UPDATE client SET name = ?, individualRegistration = ?,"
+        String query = "UPDATE Client SET name = ?, individualRegistration = ?,"
                 + "email = ? WHERE idClient = ?";
         try {
             connection = ConnectionFactory.openConnection();
@@ -60,7 +62,7 @@ public class ClientListDaoImpl implements Serializable {
             prepared.setString(1, client.getName());
             prepared.setString(2, client.getIndividualRegistration());
             prepared.setString(3, client.getEmail());
-            prepared.setInt(1, client.getId());
+            prepared.setInt(4, client.getId());
             prepared.executeUpdate();
             phoneDaoImpl = new PhoneDaoImpl();
             phoneDaoImpl.change(client.getPhone(), connection);
@@ -72,7 +74,7 @@ public class ClientListDaoImpl implements Serializable {
     }
 
     public void delete(int id) {
-        String query = "DELETE * FROM Client WHERE idClient = ?";
+        String query = "DELETE FROM Client WHERE idClient = ?";
         try {
             connection = ConnectionFactory.openConnection();
             prepared = connection.prepareStatement(query);
@@ -87,10 +89,11 @@ public class ClientListDaoImpl implements Serializable {
 
     public List<Client> listAll() {
         String query = "SELECT * FROM Client INNER JOIN Phone ON Client.idclient = Phone.idclient";
+        dataClient = new ArrayList<>();
         try {
             connection = ConnectionFactory.openConnection();
             prepared = connection.prepareStatement(query);
-            prepared.executeUpdate();
+            result = prepared.executeQuery();
             while (result.next()) {
                 client = new Client();
                 client.setId(result.getInt("Client.idClient"));
@@ -139,6 +142,38 @@ public class ClientListDaoImpl implements Serializable {
             ConnectionFactory.closeConnection(connection, prepared, result);
         }
         return client;
+    }
+
+    public List<Client> searchByName(String name) {
+        String query = "SELECT * FROM Client INNER JOIN Phone ON Client.idClient = Phone.idClient "
+                + "WHERE name LIKE ?";
+        dataClient = new ArrayList<>();
+        try {
+            connection = ConnectionFactory.openConnection();
+            prepared = connection.prepareStatement(query);
+            prepared.setString(1, "%" + name + "%");
+            result = prepared.executeQuery();
+            while (result.next()) {
+                client = new Client();
+                client.setId(result.getInt("Client.idClient"));
+                client.setName(result.getString("name"));
+                client.setIndividualRegistration(result.getString("individualRegistration"));
+                client.setEmail(result.getString("email"));
+                phone = new Phone();
+                phone.setId(result.getInt("Phone.idClient"));
+                phone.setPhoneNumber(result.getString("phoneNumber"));
+                phone.setType(result.getString("type"));
+                phone.setPhoneCarrier(result.getString("phoneCarrier"));
+                client.setPhone(phone);
+                dataClient.add(client);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Erro ao pesquisar Cliente " + e.getMessage());
+        } finally {
+            ConnectionFactory.closeConnection(connection, prepared, result);
+        }
+        return dataClient;
     }
 
 }
